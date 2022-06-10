@@ -35,21 +35,17 @@ const ShoeCard = ({
     <Link href={`/shoe/${slug}`}>
       <Wrapper>
         <ImageWrapper>
-          <Image alt="" src={imageSrc} />
-          {variant === 'on-sale' && <SaleFlag>Sale</SaleFlag>}
-          {variant === 'new-release' && (
-            <NewFlag>Just released!</NewFlag>
-          )}
+          <Image alt='' src={imageSrc} />
         </ImageWrapper>
+        {variant === 'on-sale' && <SaleFlag>Sale</SaleFlag>}
+        {variant === 'new-release' && <NewFlag>Just released!</NewFlag>}
         <Spacer size={12} />
         <Row>
           <Name>{name}</Name>
           <Price
             style={{
               '--color':
-                variant === 'on-sale'
-                  ? 'var(--color-gray-700)'
-                  : undefined,
+                variant === 'on-sale' ? 'var(--color-gray-700)' : undefined,
               '--text-decoration':
                 variant === 'on-sale' ? 'line-through' : undefined,
             }}
@@ -73,15 +69,28 @@ const Link = styled.a`
   color: inherit;
 `;
 
-const Wrapper = styled.article``;
-
-const ImageWrapper = styled.div`
+const Wrapper = styled.article`
   position: relative;
 `;
 
-const Image = styled.img`
-  width: 100%;
+const ImageWrapper = styled.div`
   border-radius: 16px 16px 4px 4px;
+  overflow: hidden;
+`;
+
+const Image = styled.img`
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    transition: transform 300ms;
+    will-change: transform;
+    transform-origin: 50% 75%;
+    ${Link}:hover & {
+      transform: scale(1.1);
+      transition: 250ms;
+    }
+  }
 `;
 
 const Row = styled.div`
@@ -107,13 +116,14 @@ const ColorInfo = styled.p`
 const SalePrice = styled.span`
   font-weight: ${WEIGHTS.medium};
   color: var(--color-primary);
+  transition: transform 200ms;
 `;
 
 const Flag = styled.div`
   position: absolute;
   top: 12px;
-  right: -4px;
   background: red;
+  right: -8px;
   height: 32px;
   line-height: 32px;
   padding: 0 10px;
@@ -121,6 +131,14 @@ const Flag = styled.div`
   font-weight: ${WEIGHTS.bold};
   color: var(--color-white);
   border-radius: 2px;
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    ${Link}:hover & {
+      transform: scale(1.1) translateX(-5%);
+      transition: transform 150ms;
+    }
+    transition: transform 500ms;
+    will-change: transform;
+  }
 `;
 
 const SaleFlag = styled(Flag)`
